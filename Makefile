@@ -13,7 +13,8 @@ SRC_FILES := $(wildcard $(SRC_DIR)/*/*.c) $(wildcard $(SRC_DIR)/*/*.cpp)
 
 EXECUTABLES := $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%,$(filter %.c, $(SRC_FILES))) \
                $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%,$(filter %.cpp, $(SRC_FILES))) \
-	       $(BUILD_DIR)/calling-convention/calling-convention-cdecl-x64
+			   $(BUILD_DIR)/calling-convention/calling-convention-cdecl-x64 \
+			   $(BUILD_DIR)/lab/lab5-canary
 
 
 all: $(EXECUTABLES) $(patsubst $(BUILD_DIR)/%,$(BUILD_DIR)/%.s,$(EXECUTABLES))
@@ -33,6 +34,10 @@ $(BUILD_DIR)/calling-convention/calling-convention-cdecl-x64: src/calling-conven
 $(BUILD_DIR)/%.s: $(BUILD_DIR)/%
 	@mkdir -p $(@D)
 	objdump -d -M intel $< > $@
+
+$(BUILD_DIR)/lab/lab5-canary: $(SRC_DIR)/lab/lab5-canary.c
+	@mkdir -p $(@D)
+	$(CC) $(CFLAGS) -no-pie -fno-pic -o $@ $<
 
 clean:
 	rm -rf $(BUILD_DIR)

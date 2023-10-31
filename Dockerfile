@@ -8,7 +8,7 @@ WORKDIR /app
 ADD Makefile /app/
 ADD src /app/src
 RUN make
-ADD vendor/pivot32 /app/build/lab2-pivot32
+ADD vendor/pivot32 /app/build/lab/lab2-pivot32
 
 
 FROM --platform=linux/amd64 ubuntu:22.04
@@ -18,6 +18,7 @@ RUN git clone https://github.com/longld/peda.git ~/peda
 RUN echo "source ~/peda/peda.py" >> ~/.gdbinit
 RUN pip3 install -U pip
 RUN pip3 install ROPGadget pwntools
+WORKDIR /app
 COPY --from=bin /app/build /app
 COPY --from=ropr /usr/local/cargo/bin/ropr /usr/local/bin/ropr
 CMD ["/bin/bash"]
